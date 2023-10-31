@@ -1,30 +1,29 @@
 type user {
 	id: ID!
 	email: String!
-	username: String!
+	username: String
 	password: String!
-	phoneNo: String!
-	loginType: Int!
-	refreshToken: String!
+	phoneNo: String
+	refreshToken: String
 }
 
 input userInput {
-	id: ID!
 	email: String!
-	username: String!
+	username: String
 	password: String!
-	phoneNo: String!
-	loginType: Int!
-	refreshToken: String!
+	phoneNo: String
+	refreshToken: String
 }
 
 type Query {
 	users: [user!]!
 	user(id: ID!): user
+	privateInfo: user
 }
 
 type Mutation {
 	createUser(input: userInput!): user!
 	updateUser(id: ID!, input: userInput): user
 	deleteUser(id: ID!): Boolean
+	loginUser(username: String!, password: String!): String
 }

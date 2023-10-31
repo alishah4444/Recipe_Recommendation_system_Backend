@@ -1,24 +1,6 @@
-const employees = [
-	{
-		id: '1',
-		username: 'John',
-		email: 'John@example.com',
-		password: 'Admin@12',
-		phoneNo: '2235655545',
-		loginType: 2,
-		refreshToken: '123456sasfsfsf',
-	},
-	{
-		id: '2',
-		username: 'jane',
-		email: 'Jane@example.com',
-		password: 'Admin@12',
-		phoneNo: '21368258221',
-		loginType: 2,
-		refreshToken: '15482165423851855',
-	},
-	// Add more dummy employees as needed
-];
+const userModal = require('../modal/userModal');
+const SECRET_KEY = process.env.SECRET_KEY;
+const jwt = require('jsonwebtoken');
 
 const resolvers = {
 	Query: {
@@ -26,10 +8,17 @@ const resolvers = {
 		user: (parent, { id }) => employees.find((employee) => employee.id === id),
 	},
 	Mutation: {
-		createUser: (parent, { input }) => {
-			const newEmployee = { id: String(employees.length + 1), ...input };
-			employees.push(newEmployee);
-			return newEmployee;
+		createUser: async (parent, { input }) => {
+			const newUser = new userModal(input);
+			console.log(newUser);
+
+			const token = jwt.sign({ username: input }, SECRET_KEY);
+
+			newUser.refreshToken = token;
+			const savedUser = await newUser.save();
+
+			console.log(savedUser);
+			return savedUser;
 		},
 		updateUser: (parent, { id, input }) => {
 			const index = employees.findIndex((employee) => employee.id === id);
@@ -46,6 +35,11 @@ const resolvers = {
 				return true;
 			}
 			return false;
+		},
+
+		loginUser: (parent, args) => {
+			const token = jwt.sign({ username: args.username }, SECRET_KEY);
+			return token;
 		},
 	},
 };
