@@ -10,7 +10,6 @@ const resolvers = {
 	Mutation: {
 		createUser: async (parent, { input }) => {
 			const newUser = new userModal(input);
-			console.log(newUser);
 
 			const token = jwt.sign({ username: input }, SECRET_KEY);
 
@@ -37,9 +36,22 @@ const resolvers = {
 			return false;
 		},
 
-		loginUser: (parent, args) => {
-			const token = jwt.sign({ username: args.username }, SECRET_KEY);
-			return token;
+		loginUser: async (parent, input) => {
+			const { email, password } = input;
+
+			const userData = await userModal.findOne({ email: email });
+			console.log(userData);
+			if (userData != null) {
+				if (userData.password == password) {
+					const token = jwt.sign({ username: input }, SECRET_KEY);
+					userData.refreshToken = token;
+					return userData;
+				} else {
+					return { status: 400, message: 'Password not match' };
+				}
+			} else {
+				return { status: 400, message: 'no user' };
+			}
 		},
 	},
 };
