@@ -35,3 +35,4 @@ server.listen(PORT).then(({ url }) => {
 		}
 	});
 });
+module.exports = server;
