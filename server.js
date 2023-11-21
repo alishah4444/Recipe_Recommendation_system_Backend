@@ -9,11 +9,17 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const PORT = 3000 || process.env.PORT;
 const typeDefs = fs.readFileSync(path.join(__dirname, './schema/userSchema.graphql'), 'utf8');
+const recipeTypeDefs = fs.readFileSync(path.join(__dirname, './schema/reciepeSchema.graphql'), 'utf8');
 const resolvers = require('./resolver/userResolver');
+const recipeResolvers = require('./resolver/recipeResolver');
+const { merge } = require('lodash');
+
+const mergedTypeDefs = [typeDefs, recipeTypeDefs];
+const mergedResolvers = [resolvers, recipeResolvers];
 
 const server = new ApolloServer({
-	typeDefs,
-	resolvers,
+	typeDefs: mergedTypeDefs,
+	resolvers: mergedResolvers,
 	context: ({ req }) => {
 		const token = req.headers.authorization || '';
 		try {

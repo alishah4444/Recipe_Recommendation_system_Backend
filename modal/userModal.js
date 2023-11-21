@@ -23,6 +23,7 @@ const userSchema = new schema(
 			type: Number,
 			require: true,
 		},
+
 		refreshToken: { type: String },
 	},
 	{ timestamps: true }

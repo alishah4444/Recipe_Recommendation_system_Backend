@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 
 const resolvers = {
 	Query: {
-		users: () => employees,
-		user: (parent, { id }) => employees.find((employee) => employee.id === id),
+		users: async () => await userModal.find(),
+		user: (parent, { id }) => userModal.findById(id),
 	},
 	Mutation: {
 		createUser: async (parent, { input }) => {
@@ -47,10 +47,10 @@ const resolvers = {
 					userData.refreshToken = token;
 					return userData;
 				} else {
-					return { status: 400, message: 'Password not match' };
+					return { user: null };
 				}
 			} else {
-				return { status: 400, message: 'no user' };
+				return { user: null };
 			}
 		},
 	},
