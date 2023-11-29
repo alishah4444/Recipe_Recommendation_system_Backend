@@ -58,3 +58,4 @@ apolloServer.start().then(() => {
 		console.log('Socket.IO connected:', socket.id);
 	});
 });
+module.exports = server;
