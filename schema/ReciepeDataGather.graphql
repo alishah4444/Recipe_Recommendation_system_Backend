@@ -1,0 +1,29 @@
+type userData {
+	ID: ID!
+	userId: String!
+	ReciepeId: String!
+	description: String!
+	rating: String
+	isReadCount: Int
+	CreatedDate: String!
+	UpdatedDate: String
+}
+
+input userDataInput {
+	userId: String!
+	ReciepeId: String!
+	description: String!
+	rating: String
+	CreatedDate: String!
+	UpdatedDate: String
+	isReadCount: Int
+}
+
+type Query {
+	recipes: [Recipe!]!
+	recipe(id: ID!): Recipe
+}
+
+type Mutation {
+	insertUserInterect(input: userDataInput!): userData!
+}

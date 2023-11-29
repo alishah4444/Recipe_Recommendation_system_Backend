@@ -14,6 +14,7 @@ const recipeResolvers = {
 	Mutation: {
 		createRecipe: async (_, { input }) => {
 			const recipe = new Recipe(input);
+			console.log(recipe);
 			await recipe.save();
 			return recipe;
 		},

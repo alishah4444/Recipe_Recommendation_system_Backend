@@ -1,18 +1,36 @@
+input IngredientInput {
+	name: String!
+	qty: String
+}
+
+type Ingredient {
+	name: String!
+	qty: String
+}
+
 type Recipe {
 	id: ID!
 	title: String!
 	description: String!
 	rating: String
-	ingredients: [String]
+	ingredients: [Ingredient]
 	specialInstruction: String
+	userId: String!
+	cookTime: String!
+	servings: String!
+	imageUrl: String!
 }
 
 input RecipeInput {
 	title: String!
 	description: String!
 	rating: String
-	ingredients: [String]
+	ingredients: [IngredientInput]
 	specialInstruction: String
+	userId: String!
+	cookTime: String!
+	servings: String!
+	imageUrl: String!
 }
 
 type Query {
