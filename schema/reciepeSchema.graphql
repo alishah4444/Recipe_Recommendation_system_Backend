@@ -19,6 +19,7 @@ type Recipe {
 	cookTime: String!
 	servings: String!
 	imageUrl: String!
+	socketId: String
 }
 
 input RecipeInput {
@@ -31,6 +32,7 @@ input RecipeInput {
 	cookTime: String!
 	servings: String!
 	imageUrl: String!
+	socketId: String
 }
 
 type Query {

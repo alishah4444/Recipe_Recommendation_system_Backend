@@ -7,19 +7,18 @@ const databaseURL = process.env.DATABASE_KEY;
 const SECRET_KEY = process.env.SECRET_KEY;
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const http = require('http'); // Add this line for HTTP server
+const http = require('http');
 const socketio = require('socket.io');
-
 const PORT = 3000 || process.env.PORT;
 const typeDefs = fs.readFileSync(path.join(__dirname, './schema/userSchema.graphql'), 'utf8');
 const recipeTypeDefs = fs.readFileSync(path.join(__dirname, './schema/reciepeSchema.graphql'), 'utf8');
 const resolvers = require('./resolver/userResolver');
 const recipeResolvers = require('./resolver/recipeResolver');
-const { merge } = require('lodash');
 const express = require('express');
 const app = express();
 const mergedTypeDefs = [typeDefs, recipeTypeDefs];
 const mergedResolvers = [resolvers, recipeResolvers];
+const { initializeSocket, emitSomeEvent } = require('./middleware/socketIo');
 
 const apolloServer = new ApolloServer({
 	typeDefs: mergedTypeDefs,
@@ -36,8 +35,8 @@ const apolloServer = new ApolloServer({
 });
 
 const httpServer = http.createServer(app);
-const io = socketio(httpServer);
 
+const io = initializeSocket(httpServer);
 apolloServer.start().then(() => {
 	apolloServer.applyMiddleware({ app });
 
@@ -53,9 +52,6 @@ apolloServer.start().then(() => {
 			console.log('Database error');
 		}
 	});
-
-	io.on('connection', (socket) => {
-		console.log('Socket.IO connected:', socket.id);
-	});
 });
-module.exports = server;
+
+module.exports = { io };

@@ -1,6 +1,7 @@
 const SECRET_KEY = process.env.SECRET_KEY;
 const jwt = require('jsonwebtoken');
 const Recipe = require('../modal/recipeModel');
+const { emitReciperCreatre } = require('../middleware/socketIo');
 
 const recipeResolvers = {
 	Query: {
@@ -16,6 +17,9 @@ const recipeResolvers = {
 			const recipe = new Recipe(input);
 			console.log(recipe);
 			await recipe.save();
+
+			emitReciperCreatre(recipe);
+
 			return recipe;
 		},
 		updateRecipe: async (_, { id, input }) => {
